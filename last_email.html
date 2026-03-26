@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #121212; color: #ffffff; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 20px auto; background-color: #1e1e1e; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
+    .header { padding: 30px; border-bottom: 1px solid #333; }
+    .header h1 { margin: 0; font-size: 24px; font-weight: 600; color: #fff; }
+    .content { padding: 30px; }
+    .warning-box { background-color: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; padding: 15px; border-radius: 4px; margin-bottom: 25px; display: flex; align-items: flex-start; gap: 12px; }
+    .warning-icon { color: #ffc107; font-size: 20px; font-weight: bold; }
+    .warning-text { color: #fff; font-size: 15px; line-height: 1.5; }
+    .details-card { background-color: #252525; border-radius: 8px; padding: 25px; margin-bottom: 25px; }
+    .details-card h2 { margin-top: 0; font-size: 18px; margin-bottom: 20px; color: #fff; }
+    .detail-row { margin-bottom: 12px; display: flex; }
+    .detail-label { width: 120px; color: #aaa; font-size: 14px; font-weight: 600; }
+    .detail-value { flex: 1; color: #fff; font-size: 14px; font-family: monospace; }
+    .footer { padding: 20px 30px; background-color: #1a1a1a; color: #888; font-size: 13px; text-align: left; border-top: 1px solid #333; }
+    .brand { color: #3b82f6; font-weight: bold; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Security Alert: Suspicious Login Detected</h1>
+    </div>
+    <div class="content">
+      <div class="warning-box">
+        <div class="warning-icon">⚠️</div>
+        <div class="warning-text">
+          <strong>Important:</strong> We detected a login to your account from a new IP address.
+        </div>
+      </div>
+      
+      <div class="details-card">
+        <h2>Login Details:</h2>
+        <div class="detail-row">
+          <div class="detail-label">Account:</div>
+          <div class="detail-value">security-admin@demo.com</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Time:</div>
+          <div class="detail-value">23/3/2026, 5:27:20 pm</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Previous IP:</div>
+          <div class="detail-value">192.168.1.5</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">IP Address:</div>
+          <div class="detail-value">82.165.12.34</div>
+        </div>
+        
+        <div class="detail-row">
+          <div class="detail-label">Location:</div>
+          <div class="detail-value">Berlin, Germany</div>
+        </div>
+        
+      </div>
+      
+      <p style="color: #ccc; font-size: 14px;">If this was you, you can ignore this email. Otherwise, please change your password immediately.</p>
+    </div>
+    <div class="footer">
+      <div class="brand">SAIS Security Intelligence</div>
+      This is an automated security notification. Please do not reply to this email.
+    </div>
+  </div>
+</body>
+</html>
+    

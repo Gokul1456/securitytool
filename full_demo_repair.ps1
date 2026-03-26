@@ -1,0 +1,33 @@
+# 🚀 Clean Up Once
+Get-Process node -ErrorAction SilentlyContinue | Stop-Process -Force
+Get-Process npm -ErrorAction SilentlyContinue | Stop-Process -Force
+
+Write-Host "Reinstalling dependencies for all services..." -ForegroundColor Cyan
+$services = "api-gateway", "sais-core", "login-notifier", "security-tools", "shared\shared"
+foreach ($s in $services) {
+    $dir = "c:\combined toolkit\security + notifier\sais\services\$s"
+    if ($s.StartsWith("shared")) { $dir = "c:\combined toolkit\security + notifier\sais\shared\shared" }
+    cd $dir
+    npm install --quiet
+}
+
+# Start SAIS
+cd "c:\combined toolkit"
+.\start_sais_local.ps1
+
+# Start Website (WITHOUT KILLS)
+Write-Host "Starting Website Backend..." -ForegroundColor Green
+Set-Location "c:\combined toolkit\Test Website\backend"
+npm install --quiet
+Start-Process -FilePath "node" -ArgumentList "server.js" -NoNewWindow
+
+Write-Host "Starting Website Frontend..." -ForegroundColor Green
+Set-Location "c:\combined toolkit\Test Website\frontend"
+npm install --quiet
+Start-Process -FilePath "npm.cmd" -ArgumentList "run dev" -NoNewWindow
+
+Write-Host "`n🚀 PROJECT REPAIRED AND RUNNING FAST!" -ForegroundColor BrightWhite
+Write-Host "Frontend: http://localhost:5173"
+Write-Host "Backend:  http://localhost:3000"
+Write-Host "Gateway:  http://localhost:4000"
+
