@@ -36,7 +36,13 @@ gateway.post('/scan/single', (req, res) => {
     res.json({ ok: true, output: result });
 });
 
-gateway.listen(4000, () => console.log('SAIS Gateway Demo Mock at 4000'));
+// Export the app for serverless deployment
+module.exports = gateway;
+
+// Only listen locally if not running in production (or Netlify serverless environment)
+if (process.env.NODE_ENV !== 'production' && !process.env.NETLIFY) {
+    gateway.listen(4000, () => console.log('SAIS Gateway Demo Mock at 4000'));
+}
 
 // Keep it running for the other ports if needed. For now the gateway handles 4000 which is what backend calls.
 // Backend calls 4000/auth/analyze and 4000/scan/single
