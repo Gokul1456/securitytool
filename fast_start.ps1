@@ -18,7 +18,7 @@ $Env:CORS_ORIGINS="*,http://localhost:3000,http://localhost:5173"
 # Database URL (Adjust if your local postgres credentials differ)
 $Env:DATABASE_URL="postgres://postgres:Samson@123@localhost:5432/login_notifier"
 
-$root = "c:\security toolkit"
+$root = "E:\security\security-toolkit-app"
 
 # 1. Start SAIS Services (Ports 4000-4003)
 $saisServices = @(
@@ -51,4 +51,4 @@ Write-Host "Frontend UI:  http://localhost:5173"
 Write-Host "Backend API:  http://localhost:3000"
 Write-Host "SAIS Gateway: http://localhost:4000 (Health: /health)"
 Write-Host "--------------------------------------------------"
-Write-Host "Check 'c:\security toolkit\last_email.html' for security alerts."
+Write-Host "Check 'E:\security\security-toolkit-app\last_email.html' for security alerts."

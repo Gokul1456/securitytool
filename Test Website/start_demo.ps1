@@ -4,8 +4,8 @@
    - Keeps this script non-blocking for a smooth DX
 #>
 
-$backendDir = "c:\security toolkit\Test Website\backend"
-$frontendDir = "c:\security toolkit\Test Website\frontend"
+$backendDir = "E:\security\security-toolkit-app\Test Website\backend"
+$frontendDir = "E:\security\security-toolkit-app\Test Website\frontend"
 
 <# Reclaim ports to prevent EADDRINUSE #>
 Write-Host "Purging existing services for a fresh start..."

@@ -1,0 +1,84 @@
+services:
+  # Main Express Backend
+  - type: web
+    name: website-backend
+    env: node
+    rootDir: "Test Website/backend"
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+
+  # API Gateway
+  - type: web
+    name: api-gateway
+    env: docker
+    dockerfilePath: ./security_notifier/sais/services/api-gateway/Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4000"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sais-postgres
+          property: connectionString
+      - key: SAIS_CORE_URL
+        value: http://sais-core:4001
+      - key: LOGIN_NOTIFIER_URL
+        value: http://login-notifier:4002
+      - key: SECURITY_TOOLS_URL
+        value: http://security-tools:4003
+
+  # SAIS Core
+  - type: pserv
+    name: sais-core
+    env: docker
+    dockerfilePath: ./security_notifier/sais/services/sais-core/Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4001"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sais-postgres
+          property: connectionString
+
+  # Login Notifier
+  - type: pserv
+    name: login-notifier
+    env: docker
+    dockerfilePath: ./security_notifier/sais/services/login-notifier/Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4002"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sais-postgres
+          property: connectionString
+
+  # Security Tools
+  - type: pserv
+    name: security-tools
+    env: docker
+    dockerfilePath: ./security_notifier/sais/services/security-tools/Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4003"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sais-postgres
+          property: connectionString
+
+databases:
+  - name: sais-postgres
+    databaseName: sais
+    user: sais

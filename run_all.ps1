@@ -6,7 +6,7 @@ Get-Process node -ErrorAction SilentlyContinue | Stop-Process -Force
 Get-Process npm -ErrorAction SilentlyContinue | Stop-Process -Force
 Start-Sleep -Seconds 1
 
-$root = "c:\security toolkit"
+$root = "E:\security\security-toolkit-app"
 
 # Global Env Vars
 $Env:NODE_ENV="development"

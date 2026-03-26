@@ -5,24 +5,24 @@ Get-Process npm -ErrorAction SilentlyContinue | Stop-Process -Force
 Write-Host "Reinstalling dependencies for all services..." -ForegroundColor Cyan
 $services = "api-gateway", "sais-core", "login-notifier", "security-tools", "shared\shared"
 foreach ($s in $services) {
-    $dir = "c:\security toolkit\security_notifier\sais\services\$s"
-    if ($s.StartsWith("shared")) { $dir = "c:\security toolkit\security_notifier\sais\shared\shared" }
+    $dir = "E:\security\security-toolkit-app\security_notifier\sais\services\$s"
+    if ($s.StartsWith("shared")) { $dir = "E:\security\security-toolkit-app\security_notifier\sais\shared\shared" }
     Set-Location $dir
     npm install --quiet
 }
 
 # Start SAIS
-Set-Location "c:\security toolkit"
+Set-Location "E:\security\security-toolkit-app"
 .\start_sais_local.ps1
 
 # Start Website (WITHOUT KILLS)
 Write-Host "Starting Website Backend..." -ForegroundColor Green
-Set-Location "c:\security toolkit\Test Website\backend"
+Set-Location "E:\security\security-toolkit-app\Test Website\backend"
 npm install --quiet
 Start-Process -FilePath "node" -ArgumentList "server.js" -NoNewWindow
 
 Write-Host "Starting Website Frontend..." -ForegroundColor Green
-Set-Location "c:\security toolkit\Test Website\frontend"
+Set-Location "E:\security\security-toolkit-app\Test Website\frontend"
 npm install --quiet
 Start-Process -FilePath "npm.cmd" -ArgumentList "run dev" -NoNewWindow
 

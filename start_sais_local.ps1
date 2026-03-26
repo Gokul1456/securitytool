@@ -15,19 +15,19 @@ $Env:JWT_ACCESS_SECRET="super-secret-key-that-is-at-least-32-characters-long";
 $Env:CORS_ORIGINS="*,http://localhost:3000,http://localhost:5173";
 $Env:PORT=4000;
 
-Set-Location 'c:\security toolkit\security_notifier\sais\services\api-gateway'
+Set-Location 'E:\security\security-toolkit-app\security_notifier\sais\services\api-gateway'
 Start-Process -FilePath "node" -ArgumentList "server.js" -NoNewWindow -PassThru
 
 $Env:PORT=4001;
-Set-Location 'c:\security toolkit\security_notifier\sais\services\sais-core'
+Set-Location 'E:\security\security-toolkit-app\security_notifier\sais\services\sais-core'
 Start-Process -FilePath "node" -ArgumentList "server.js" -NoNewWindow -PassThru
 
 $Env:PORT=4002;
-Set-Location 'c:\security toolkit\security_notifier\sais\services\login-notifier'
+Set-Location 'E:\security\security-toolkit-app\security_notifier\sais\services\login-notifier'
 Start-Process -FilePath "node" -ArgumentList "server.js" -NoNewWindow -PassThru
 
 $Env:PORT=4003;
-Set-Location 'c:\security toolkit\security_notifier\sais\services\security-tools'
+Set-Location 'E:\security\security-toolkit-app\security_notifier\sais\services\security-tools'
 Start-Process -FilePath "node" -ArgumentList "server.js" -NoNewWindow -PassThru
 
 Write-Host "Services started locally."
