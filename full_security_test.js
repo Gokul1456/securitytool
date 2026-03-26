@@ -11,11 +11,7 @@ async function run() {
   // ── TEST 1: VIRUS FILE UPLOAD ──
   console.log('► [1/2] Uploading malware file...');
   try {
-<<<<<<< HEAD
     const virusFile = 'c:\\security toolkit\\Test Website\\test_virus_unique.txt';
-=======
-    const virusFile = 'c:\\combined toolkit\\Test Website\\test_virus_unique.txt';
->>>>>>> 33d40d2c93365326e4ff00622451dbf8e6fda5d4
     const form = new FormData();
     form.append('file', fs.createReadStream(virusFile), {
       filename: 'test_virus_unique.txt',
