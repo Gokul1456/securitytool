@@ -1,0 +1,142 @@
+{
+  "info": {
+    "_postman_id": "sais-api-demo-kit",
+    "name": "SAIS API - Demo Collection",
+    "description": "A complete demo suite for the Secure Access Intelligence System (SAIS) API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Health Check",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["health"]
+        },
+        "description": "Liveness probe: verifies server status, version, and uptime."
+      },
+      "response": []
+    },
+    {
+      "name": "02 - Suspicious Login - High Risk",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"newDevice\": true,\n  \"newLocation\": true,\n  \"failedAttempts\": 3,\n  \"oddTime\": true\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/auth/analyze",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["auth", "analyze"]
+        },
+        "description": "Simulates a highly suspicious login with multiple risk factors. Expected riskScore >= 60, alert = true."
+      },
+      "response": []
+    },
+    {
+      "name": "03 - Normal Login - Low Risk",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"newDevice\": false,\n  \"newLocation\": false,\n  \"failedAttempts\": 0,\n  \"oddTime\": false\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/auth/analyze",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["auth", "analyze"]
+        },
+        "description": "Simulates a standard, safe login. Expected riskScore = 0, alert = false."
+      },
+      "response": []
+    },
+    {
+      "name": "04 - File Scan - Clean",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "description": "Select 'demo-assets/clean.txt'",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/scan/file",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["scan", "file"]
+        },
+        "description": "Uploads a safe text file for scanning. Expected HTTP 200, status = clean."
+      },
+      "response": []
+    },
+    {
+      "name": "05 - File Scan - Malicious (MZ Heuristic)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "description": "Select 'demo-assets/virus.txt'",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/scan/file",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["scan", "file"]
+        },
+        "description": "Uploads a .txt file with a hidden MZ header. Expected HTTP 422, success = false, status = infected."
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ]
+}

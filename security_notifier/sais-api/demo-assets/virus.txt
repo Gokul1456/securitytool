@@ -1,0 +1,1 @@
+MZ This is a fake virus with MZ magic bytes header.

@@ -1,0 +1,2 @@
+EmailService: SMTP not configured. Emails will be logged to console.
+Login Notifier toolkit running at http://localhost:4002

@@ -1,0 +1,108 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: sais
+      POSTGRES_USER: sais
+      POSTGRES_DB: sais
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api-gateway:
+    build:
+      context: ..
+      dockerfile: services/api-gateway/Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      SERVICE_NAME: api-gateway
+      DATABASE_URL: postgres://sais:sais@postgres:5432/sais
+      REDIS_URL: redis://redis:6379
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      SAIS_INTERNAL_API_KEY: ${SAIS_INTERNAL_API_KEY}
+      SAIS_SDK_API_KEYS: ${SAIS_SDK_API_KEYS}
+      SAIS_CORE_URL: http://sais-core:4001
+      LOGIN_NOTIFIER_URL: http://login-notifier:4002
+      SECURITY_TOOLS_URL: http://security-tools:4003
+      CORS_ORIGINS: ${CORS_ORIGINS}
+    ports:
+      - "4000:4000"
+    depends_on:
+      - sais-core
+      - login-notifier
+      - security-tools
+
+  sais-core:
+    build:
+      context: ..
+      dockerfile: services/sais-core/Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: 4001
+      SERVICE_NAME: sais-core
+      DATABASE_URL: postgres://sais:sais@postgres:5432/sais
+      REDIS_URL: redis://redis:6379
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_ISSUER: sais
+      JWT_AUDIENCE: sais-api
+      SAIS_INTERNAL_API_KEY: ${SAIS_INTERNAL_API_KEY}
+      SAIS_SDK_API_KEYS: ${SAIS_SDK_API_KEYS}
+      LOGIN_NOTIFIER_URL: http://login-notifier:4002
+      CORS_ORIGINS: ${CORS_ORIGINS}
+    depends_on:
+      - postgres
+
+  login-notifier:
+    build:
+      context: ..
+      dockerfile: services/login-notifier/Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: 4002
+      DATABASE_URL: postgres://sais:sais@postgres:5432/sais
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_ACCESS_SECRET}
+      SAIS_INTERNAL_API_KEY: ${SAIS_INTERNAL_API_KEY}
+      SAIS_SDK_API_KEYS: "DEMO_API_KEY_123"
+    ports:
+      - "4002:4002"
+    depends_on:
+      - postgres
+
+  security-tools:
+    build:
+      context: ..
+      dockerfile: services/security-tools/Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: 4003
+      DATABASE_URL: postgres://sais:sais@postgres:5432/sais
+      REDIS_URL: redis://redis:6379
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      SAIS_INTERNAL_API_KEY: "internal-secret-123-very-long-key"
+      SAIS_SDK_API_KEYS: "DEMO_API_KEY_123"
+      PYTHON: python3
+      CLAMAV_ENABLED: "true"
+      CLAMAV_HOST: clamav
+      CLAMAV_PORT: 3310
+    ports:
+      - "4003:4003"
+    depends_on:
+      - clamav
+      - redis
+
+  clamav:
+    image: clamav/clamav:latest
+    ports:
+      - "3310:3310"
+
+volumes:
+  pgdata:
+

@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  sais-api:
+    build: .
+    container_name: sais-api-service
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - PYTHON=python3
+      - SCAN_TIMEOUT_MS=30000
+    # Add persistence for reports and quarantine
+    volumes:
+      - sais_quarantine:/app/quarantine
+    # Docker healthcheck (secondary to Dockerfile healthcheck)
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5000/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  sais_quarantine:

@@ -1,0 +1,1 @@
+This is a perfectly safe and clean file for testing the SAIS file scanner. No threats here!
