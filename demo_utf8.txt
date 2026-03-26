@@ -1,0 +1,46 @@
+﻿==============================================
+|      SAIS SECURITY TOOLKIT - LIVE DEMO     |
+==============================================
+
+[*] Verifying Gateway API...
+[+] API Gateway Status: [32mOK[0m
+
+==============================================
+[STAGE 1] MALWARE SCANNING INTEGRATION (CLEAN FILE)
+==============================================
+[*] Uploading clean file to Security Gateway...
+
+==============================================
+node : [-] Request failed 
+Unexpected token '<', 
+"<!DOCTYPE "... is not 
+valid JSON
+At line:1 char:1
++ node "c:\combined 
+toolkit\security + 
+notifier\sais\run_demo.js" 
+> dem ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecified: ([-]  
+   Request fai... not va   
+ lid JSON:String) [], R    
+emoteException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+[STAGE 2] MALWARE SCANNING INTEGRATION (QUARANTINE FILE)
+==============================================
+[*] Uploading EICAR test file to Security Gateway...
+[-] Request failed 
+Unexpected token '<', 
+"<!DOCTYPE "... is not 
+valid JSON
+
+==============================================
+[STAGE 3] SUSPICIOUS LOGIN MONITORING & ALERTING
+==============================================
+[*] Simulating repeated failed logins to trigger Notifier...
+    -> Attempt 1...

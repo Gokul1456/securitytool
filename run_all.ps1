@@ -6,7 +6,11 @@ Get-Process node -ErrorAction SilentlyContinue | Stop-Process -Force
 Get-Process npm -ErrorAction SilentlyContinue | Stop-Process -Force
 Start-Sleep -Seconds 1
 
+<<<<<<< HEAD
 $root = "c:\security toolkit"
+=======
+$root = "c:\combined toolkit"
+>>>>>>> 33d40d2c93365326e4ff00622451dbf8e6fda5d4
 
 # Global Env Vars
 $Env:NODE_ENV="development"
@@ -17,7 +21,11 @@ $Env:SAIS_CORE_URL="http://127.0.0.1:4001"
 $Env:LOGIN_NOTIFIER_URL="http://127.0.0.1:4002"
 $Env:SECURITY_TOOLS_URL="http://127.0.0.1:4003"
 $Env:JWT_ACCESS_SECRET="super-secret-key-that-is-at-least-32-characters-long"
+<<<<<<< HEAD
 $Env:CORS_ORIGINS="*,http://localhost:3000,http://localhost:5173"
+=======
+$Env:CORS_ORIGINS="http://localhost:3000,http://localhost:5173"
+>>>>>>> 33d40d2c93365326e4ff00622451dbf8e6fda5d4
 
 # 1. Start SAIS Services (Ports 4000-4003)
 $saisServices = @(
@@ -25,7 +33,11 @@ $saisServices = @(
 )
 
 foreach ($s in $saisServices) {
+<<<<<<< HEAD
     $dir = Join-Path $root "security_notifier\sais\services\$s"
+=======
+    $dir = Join-Path $root "security + notifier\sais\services\$s"
+>>>>>>> 33d40d2c93365326e4ff00622451dbf8e6fda5d4
     # Ensure node_modules exists
     if (-not (Test-Path (Join-Path $dir "node_modules"))) {
         Write-Host "Installing dependencies for $s (first run only)..." -ForegroundColor Magenta

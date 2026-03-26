@@ -5,8 +5,13 @@
   "main": "sais_gateway_demo_mock.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+<<<<<<< HEAD
     "dev:services": "cd \"security_notifier/sais/deploy\" && docker compose --env-file ../../.env up -d",
     "dev:services:down": "cd \"security_notifier/sais/deploy\" && docker compose --env-file ../../.env down",
+=======
+    "dev:services": "cd \"security + notifier/sais/deploy\" && docker compose --env-file ../../.env up -d",
+    "dev:services:down": "cd \"security + notifier/sais/deploy\" && docker compose --env-file ../../.env down",
+>>>>>>> 33d40d2c93365326e4ff00622451dbf8e6fda5d4
     "dev:demo": "cd \"Test Website\" && powershell -ExecutionPolicy Bypass -File \"start_demo.ps1\""
   },
   "keywords": [],
