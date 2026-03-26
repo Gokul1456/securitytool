@@ -29,7 +29,8 @@ export default function Dashboard() {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:3000/api/dashboard');
+      const apiBase = import.meta.env.VITE_API_URL || 'http://127.0.0.1:3000';
+      const res = await axios.get(`${apiBase}/api/dashboard`);
       setData(res.data);
       setLoading(false);
     } catch (err) {
@@ -165,7 +166,7 @@ export default function Dashboard() {
                     <td>
                     {file.status === 'clean' ? (
                         <a 
-                        href={`http://127.0.0.1:3000/api/files/${file.id || file._id}/download`} 
+                        href={`${import.meta.env.VITE_API_URL || 'http://127.0.0.1:3000'}/api/files/${file.id || file._id}/download`} 
                         download={file.filename.replace(/^\d+-/, '')}
                         className="btn"
                         style={{ padding: '6px 14px', fontSize: '11px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}

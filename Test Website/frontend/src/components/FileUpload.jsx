@@ -25,7 +25,8 @@ export default function FileUpload() {
     formData.append('file', file);
 
     try {
-      const res = await axios.post('http://127.0.0.1:3000/api/upload', formData, {
+      const apiBase = import.meta.env.VITE_API_URL || 'http://127.0.0.1:3000';
+      const res = await axios.post(`${apiBase}/api/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setStatus({ type: 'success', msg: res.data.message });

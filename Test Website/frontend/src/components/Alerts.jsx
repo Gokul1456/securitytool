@@ -14,7 +14,8 @@ export default function Alerts() {
 
   const fetchAlerts = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/alerts');
+      const apiBase = import.meta.env.VITE_API_URL || 'http://127.0.0.1:3000';
+      const res = await axios.get(`${apiBase}/api/alerts`);
       setAlerts(res.data.alerts);
       setLoading(false);
     } catch (err) {

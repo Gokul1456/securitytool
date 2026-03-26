@@ -16,7 +16,8 @@ export default function Login({ onLogin }) {
     setSuspicious(false);
 
     try {
-      const res = await axios.post('http://127.0.0.1:3000/api/auth/login', { email, password });
+      const apiBase = import.meta.env.VITE_API_URL || 'http://127.0.0.1:3000';
+      const res = await axios.post(`${apiBase}/api/auth/login`, { email, password });
       
       if (res.data.suspicious) {
         setSuspicious(true);

@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 const saisSdk = require('../../security_notifier/sais/sdk/sais-sdk/index.js');
-app.use(saisSdk('DEMO_API_KEY_123', { endpoint: 'http://localhost:4000' }));
+app.use(saisSdk('DEMO_API_KEY_123', { endpoint: 'https://meek-raindrop-4d4050.netlify.app' }));
 
 
 // Set up file uploads dir
@@ -203,7 +203,7 @@ app.post('/api/auth/login', async (req, res) => {
     try {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 4000);
-      const saisReq = await fetch(`http://127.0.0.1:4000/auth/analyze`, {
+      const saisReq = await fetch(`https://meek-raindrop-4d4050.netlify.app/auth/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-sais-api-key': 'DEMO_API_KEY_123' },
         body: JSON.stringify({ ipAddress: ip, deviceInfo: device, timestamp: new Date(), userId: user.id, email: user.email }),
@@ -308,7 +308,7 @@ app.post('/api/upload', uploadParams.single('file'), async (req, res) => {
     // Forward the file details to the actual SAIS scan endpoint via the gateway
     // Gateway /scan/single maps to security-tools /single
     // Wait, security tools has /single if I removed /scan prefix!
-    const scanReq = await fetch(`http://127.0.0.1:4000/scan/single`, {
+    const scanReq = await fetch(`https://meek-raindrop-4d4050.netlify.app/scan/single`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-sais-api-key': 'DEMO_API_KEY_123' },
       body: JSON.stringify({ filename: req.file.originalname, size: req.file.size })
@@ -366,7 +366,7 @@ app.post('/api/upload', uploadParams.single('file'), async (req, res) => {
     }
 
     // Trigger SAIS Security Alert (Network Call)
-    await fetch(`http://localhost:4000/notify/alert`, {
+    await fetch(`https://meek-raindrop-4d4050.netlify.app/notify/alert`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-sais-api-key': 'DEMO_API_KEY_123' },
       body: JSON.stringify({ message: alertMsg, risk_score: 95 })
