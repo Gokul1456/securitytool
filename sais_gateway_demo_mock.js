@@ -8,6 +8,11 @@ const gateway = express();
 gateway.use(cors());
 gateway.use(body);
 
+// Stateful Mock Storage (Persists as long as the Lambda/Process is alive)
+const mockFiles = [
+    { id: 1, filename: 'report.pdf', status: 'clean', uploaded_at: new Date('2026-03-27T10:00:00Z') }
+];
+
 gateway.all('*', (req, res, next) => {
     console.log(`[SAIS GATEWAY] ${req.method} ${req.url} - Key: ${req.header('x-sais-api-key')}`);
     next();
@@ -82,9 +87,7 @@ gateway.get('/api/dashboard', (req, res) => {
             { timestamp: new Date(), ip: '192.168.1.1', location: 'New York, US', risk_score: 10 },
             { timestamp: new Date(), ip: '10.0.0.5', location: 'London, UK', risk_score: 45 }
         ],
-        files: [
-            { id: 1, filename: 'report.pdf', status: 'clean', uploaded_at: new Date() }
-        ]
+        files: mockFiles
     });
 });
 
@@ -97,31 +100,48 @@ gateway.get('/api/alerts', (req, res) => {
 });
 
 gateway.post('/api/upload', (req, res) => {
-    res.json({ message: 'File uploaded and scanned successfully.' });
+    // Basic multipart parsing simulation for mock
+    // In a real Netlify function without Multer, body might be a Buffer or string
+    let filename = 'uploaded_file.bin';
+    
+    // Attempt to find a filename in the raw body if it's a string (multipart/form-data)
+    if (typeof req.body === 'string' || Buffer.isBuffer(req.body)) {
+        const bodyStr = req.body.toString();
+        const match = bodyStr.match(/filename="(.+?)"/);
+        if (match) filename = match[1];
+    }
+    
+    const newFile = {
+        id: Date.now(),
+        filename: filename,
+        status: 'clean',
+        uploaded_at: new Date()
+    };
+    
+    mockFiles.unshift(newFile); // Add to the top of the list
+    console.log(`[SAIS GATEWAY] Mock uploaded file staged: ${filename}`);
+    
+    res.json({ message: 'File uploaded and scanned successfully.', filename });
 });
 
 // Mock: Secure File Download (Fix for /api/files/:id/download error)
 gateway.get('/api/files/:id/download', (req, res) => {
     const { id } = req.params;
-    console.log(`[SAIS GATEWAY] Downloading mock file for ID: ${id}`);
+    const file = mockFiles.find(f => String(f.id) === String(id));
     
-    // In a real app, we'd serve the file from disk or DB. 
-    // For this mock, we serve a virtual PDF receipt.
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=security-report-${id}.pdf`);
+    if (!file) {
+        return res.status(404).send('File record not found in mock storage.');
+    }
+
+    console.log(`[SAIS GATEWAY] Downloading mock file: ${file.filename} (ID: ${id})`);
     
-    // Minimal valid PDF structure
-    const pdfContent = Buffer.from(
-        '%PDF-1.4\n' +
-        '1 0 obj <</Type/Catalog/Pages 2 0 R>> endobj\n' +
-        '2 0 obj <</Type/Pages/Kids [3 0 R]/Count 1>> endobj\n' +
-        '3 0 obj <</Type/Page/Parent 2 0 R/MediaBox [0 0 612 792]/Contents 4 0 R>> endobj\n' +
-        '4 0 obj <</Length 51>> stream\n' +
-        'BT /F1 24 Tf 100 700 Td (SAIS SECURITY SCAN PASSED: ID ' + id + ') Tj ET\n' +
-        'endstream endobj\n' +
-        'xref\n0 5\n0000000000 65535 f\n0000000010 00000 n\n0000000053 00000 n\n0000000102 00000 n\n0000000188 00000 n\ntrailer <</Size 5/Root 1 0 R>>\nstartxref\n290\n%%EOF'
-    );
-    res.send(pdfContent);
+    // Serve a virtual PDF/Binary content with the correct filename
+    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader('Content-Disposition', `attachment; filename="${file.filename}"`);
+    
+    // For the demo, we always send a small "Safe" message content
+    const content = Buffer.from(`SAIS SECURITY CLEARANCE GRANTED\nFilename: ${file.filename}\nTimestamp: ${new Date().toISOString()}\nResult: CLEAN`);
+    res.send(content);
 });
 
 // Export the app for serverless deployment
