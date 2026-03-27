@@ -13,6 +13,32 @@ gateway.all('*', (req, res, next) => {
     next();
 });
 
+gateway.get('/', (req, res) => {
+    res.send(`
+        <html>
+            <head>
+                <title>SAIS Security Gateway</title>
+                <style>
+                    body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f0f4f8; color: #334; }
+                    .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+                    h1 { color: #2563eb; }
+                    .status { display: inline-block; padding: 4px 12px; background: #dcfce7; color: #15803d; border-radius: 100px; font-weight: bold; font-size: 14px; }
+                    a { color: #2563eb; text-decoration: none; font-weight: bold; }
+                    a:hover { text-decoration: underline; }
+                </style>
+            </head>
+            <body>
+                <div class="card">
+                    <h1>SAIS Gateway Mock</h1>
+                    <div class="status">● All Systems Operational</div>
+                    <p>The security monitoring backend is active.</p>
+                    <p><a href="/api/dashboard">View Dashboard JSON</a> | <a href="/api/files/1/download">Test Download</a></p>
+                </div>
+            </body>
+        </html>
+    `);
+});
+
 gateway.get('/health', (req, res) => res.json({ status: 'ok', service: 'gateway-mock' }));
 
 gateway.post('/auth/telemetry/login', (req, res) => {
