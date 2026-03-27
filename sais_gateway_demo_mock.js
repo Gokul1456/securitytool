@@ -1,16 +1,21 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const body = express.json();
+const multer = require('multer');
+
+// Configure Multer for in-memory storage (to persist binary data in the mock)
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+});
 
 // GATEWAY & AUTH (Port 4000)
 const gateway = express();
 gateway.use(cors());
 
-// Global Body Parser Configuration
-// We use JSON for most routes, but RAW for upload to handle binary data
+// Body Parsers
 const jsonParser = express.json();
-const rawParser = express.raw({ type: 'multipart/form-data', limit: '10mb' });
+// Note: Multer handles multipart/form-data, so we don't need rawParser for uploads anymore
 
 // Global Error Handler to prevent process crashes
 gateway.use((err, req, res, next) => {
@@ -111,56 +116,25 @@ gateway.get('/api/alerts', jsonParser, (req, res) => {
     });
 });
 
-gateway.post('/api/upload', rawParser, (req, res) => {
+gateway.post('/api/upload', upload.single('file'), (req, res) => {
     try {
-        let filename = 'uploaded_file.bin';
-        let fileContent = req.body;
-        let contentType = 'application/octet-stream';
-
-        // Basic multipart boundary parsing to extract binary file content
-        if (Buffer.isBuffer(req.body)) {
-            const bodyStr = req.body.toString('latin1'); // Use latin1 to preserve binary bytes
-            
-            // Extract filename
-            const filenameMatch = bodyStr.match(/filename="(.+?)"/);
-            if (filenameMatch) filename = filenameMatch[1];
-
-            // Extract content-type of the part
-            const typeMatch = bodyStr.match(/Content-Type:\s*(.+)/i);
-            if (typeMatch) contentType = typeMatch[1].trim();
-
-            // Locate the start of the file data (after the header double newline)
-            const headerEndIndex = bodyStr.indexOf('\r\n\r\n');
-            if (headerEndIndex !== -1) {
-                const dataStart = headerEndIndex + 4;
-                
-                // Find the boundary to know where the data ends
-                const contentTypeHeader = req.headers['content-type'] || '';
-                const boundaryMatch = contentTypeHeader.match(/boundary=(.+)/);
-                if (boundaryMatch) {
-                    const boundary = '--' + boundaryMatch[1];
-                    const dataEnd = bodyStr.indexOf(boundary, dataStart);
-                    if (dataEnd !== -1) {
-                        // Extract the actual binary slice from the original Buffer
-                        fileContent = req.body.slice(dataStart, dataEnd - 2); // -2 removes trailing CRLF
-                    }
-                }
-            }
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
         }
 
         const newFile = {
             id: Date.now(),
-            filename: filename,
-            content: fileContent,
-            contentType: contentType,
+            filename: req.file.originalname,
+            content: req.file.buffer,
+            contentType: req.file.mimetype,
             status: 'clean',
             uploaded_at: new Date()
         };
         
         mockFiles.unshift(newFile);
-        console.log(`[SAIS GATEWAY] Mock uploaded file stored: ${filename} (${fileContent.length} bytes)`);
+        console.log(`[SAIS GATEWAY] Mock uploaded file stored (Multer): ${newFile.filename} (${newFile.content.length} bytes)`);
         
-        res.json({ message: 'File uploaded and scanned successfully.', filename });
+        res.json({ message: 'File uploaded and scanned successfully.', filename: newFile.filename });
     } catch (err) {
         console.error('[SAIS GATEWAY] Upload error:', err.message);
         res.status(500).json({ error: 'Upload failed' });
