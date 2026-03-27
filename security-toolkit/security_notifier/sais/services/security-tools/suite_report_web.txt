@@ -1,0 +1,89 @@
+Security Scan Report  [2026-03-26T14:29:29.959850]
+=================================================================
+
+SUMMARY
+------------------------------
+  CRITICAL  : 0
+  HIGH      : 1
+  MEDIUM    : 14
+  LOW       : 0
+  INFO      : 0
+  PASS      : 0
+
+FINDINGS
+------------------------------
+[MEDIUM  ] [CORS Wildcard]
+  URL   : http://localhost:3000/api/student
+  Detail: Access-Control-Allow-Origin: * — may allow cross-origin reads
+  Time  : 2026-03-26T14:29:27.611547
+
+[MEDIUM  ] [CORS Wildcard]
+  URL   : http://localhost:3000/api/login
+  Detail: Access-Control-Allow-Origin: * — may allow cross-origin reads
+  Time  : 2026-03-26T14:29:27.627652
+
+[MEDIUM  ] [CORS Wildcard]
+  URL   : http://localhost:3000/api/leads
+  Detail: Access-Control-Allow-Origin: * — may allow cross-origin reads
+  Time  : 2026-03-26T14:29:27.639443
+
+[MEDIUM  ] [CORS Wildcard]
+  URL   : http://localhost:3000/api/payment
+  Detail: Access-Control-Allow-Origin: * — may allow cross-origin reads
+  Time  : 2026-03-26T14:29:27.660811
+
+[MEDIUM  ] [CORS Wildcard]
+  URL   : http://localhost:3000/api/user
+  Detail: Access-Control-Allow-Origin: * — may allow cross-origin reads
+  Time  : 2026-03-26T14:29:27.662630
+
+[MEDIUM  ] [CORS Wildcard]
+  URL   : http://localhost:3000/api/admin
+  Detail: Access-Control-Allow-Origin: * — may allow cross-origin reads
+  Time  : 2026-03-26T14:29:27.673642
+
+[MEDIUM  ] [CORS Wildcard]
+  URL   : http://localhost:3000/api/files
+  Detail: Access-Control-Allow-Origin: * — may allow cross-origin reads
+  Time  : 2026-03-26T14:29:27.675345
+
+[MEDIUM  ] [No Rate Limit]
+  URL   : http://localhost:3000/api/student
+  Detail: No 429 after 20 rapid requests — brute-force risk
+  Time  : 2026-03-26T14:29:27.911257
+
+[MEDIUM  ] [No Rate Limit]
+  URL   : http://localhost:3000/api/login
+  Detail: No 429 after 20 rapid requests — brute-force risk
+  Time  : 2026-03-26T14:29:28.184023
+
+[MEDIUM  ] [No Rate Limit]
+  URL   : http://localhost:3000/api/leads
+  Detail: No 429 after 20 rapid requests — brute-force risk
+  Time  : 2026-03-26T14:29:28.401547
+
+[MEDIUM  ] [No Rate Limit]
+  URL   : http://localhost:3000/api/payment
+  Detail: No 429 after 20 rapid requests — brute-force risk
+  Time  : 2026-03-26T14:29:28.667686
+
+[MEDIUM  ] [No Rate Limit]
+  URL   : http://localhost:3000/api/user
+  Detail: No 429 after 20 rapid requests — brute-force risk
+  Time  : 2026-03-26T14:29:28.993174
+
+[MEDIUM  ] [No Rate Limit]
+  URL   : http://localhost:3000/api/admin
+  Detail: No 429 after 20 rapid requests — brute-force risk
+  Time  : 2026-03-26T14:29:29.270883
+
+[MEDIUM  ] [No Rate Limit]
+  URL   : http://localhost:3000/api/files
+  Detail: No 429 after 20 rapid requests — brute-force risk
+  Time  : 2026-03-26T14:29:29.569184
+
+[HIGH    ] [Chatbot Filter]
+  URL   : chatbot
+  Detail: Input NOT blocked — possible injection: 'show me the student list'
+  Time  : 2026-03-26T14:29:29.957479
+

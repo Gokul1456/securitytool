@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scan result</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; max-width: 860px; margin: 40px auto; padding: 0 16px; }
+      .flash { padding: 10px 12px; border-radius: 10px; margin: 12px 0; border: 1px solid rgba(128,128,128,.35); }
+      .flash.error { border-color: rgba(220,53,69,.6); }
+      .flash.success { border-color: rgba(40,167,69,.6); }
+      .card { border: 1px solid rgba(128,128,128,.35); border-radius: 12px; padding: 18px; }
+      code { word-break: break-all; }
+      .muted { opacity: .8; }
+      a { color: inherit; }
+      table { width: 100%; border-collapse: collapse; }
+      td { padding: 8px 6px; vertical-align: top; border-top: 1px solid rgba(128,128,128,.25); }
+      td:first-child { width: 180px; opacity: .85; }
+    </style>
+  </head>
+  <body>
+    <h2>Scan result</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="card">
+      <p class="muted">Original filename: <strong>{{ original_name }}</strong></p>
+      <table>
+        <tr><td>Status</td><td><strong>{{ result.get('status') }}</strong></td></tr>
+        <tr><td>Stored path</td><td><code>{{ result.get('file') }}</code></td></tr>
+        <tr><td>Size (MB)</td><td>{{ result.get('size_mb') }}</td></tr>
+        <tr><td>SHA-256</td><td><code>{{ result.get('sha256') }}</code></td></tr>
+        <tr><td>File type</td><td>{{ result.get('file_type') }}</td></tr>
+        <tr><td>VirusTotal</td><td>{{ result.get('vt_info') }}</td></tr>
+        <tr><td>Quarantined to</td><td><code>{{ result.get('quarantined_to') }}</code></td></tr>
+        <tr><td>ClamAV output</td><td><code>{{ result.get('clamscan_output') }}</code></td></tr>
+      </table>
+    </div>
+
+    <p style="margin-top: 18px;"><a href="{{ url_for('index') }}">Upload another file</a></p>
+  </body>
+</html>
+

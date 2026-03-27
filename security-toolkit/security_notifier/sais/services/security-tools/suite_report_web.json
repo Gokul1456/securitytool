@@ -1,0 +1,111 @@
+{
+  "scan_time": "2026-03-26T14:29:29.959197",
+  "total": 15,
+  "findings": [
+    {
+      "level": "MEDIUM",
+      "category": "CORS Wildcard",
+      "url": "http://localhost:3000/api/student",
+      "detail": "Access-Control-Allow-Origin: * \u2014 may allow cross-origin reads",
+      "time": "2026-03-26T14:29:27.611547"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "CORS Wildcard",
+      "url": "http://localhost:3000/api/login",
+      "detail": "Access-Control-Allow-Origin: * \u2014 may allow cross-origin reads",
+      "time": "2026-03-26T14:29:27.627652"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "CORS Wildcard",
+      "url": "http://localhost:3000/api/leads",
+      "detail": "Access-Control-Allow-Origin: * \u2014 may allow cross-origin reads",
+      "time": "2026-03-26T14:29:27.639443"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "CORS Wildcard",
+      "url": "http://localhost:3000/api/payment",
+      "detail": "Access-Control-Allow-Origin: * \u2014 may allow cross-origin reads",
+      "time": "2026-03-26T14:29:27.660811"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "CORS Wildcard",
+      "url": "http://localhost:3000/api/user",
+      "detail": "Access-Control-Allow-Origin: * \u2014 may allow cross-origin reads",
+      "time": "2026-03-26T14:29:27.662630"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "CORS Wildcard",
+      "url": "http://localhost:3000/api/admin",
+      "detail": "Access-Control-Allow-Origin: * \u2014 may allow cross-origin reads",
+      "time": "2026-03-26T14:29:27.673642"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "CORS Wildcard",
+      "url": "http://localhost:3000/api/files",
+      "detail": "Access-Control-Allow-Origin: * \u2014 may allow cross-origin reads",
+      "time": "2026-03-26T14:29:27.675345"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "No Rate Limit",
+      "url": "http://localhost:3000/api/student",
+      "detail": "No 429 after 20 rapid requests \u2014 brute-force risk",
+      "time": "2026-03-26T14:29:27.911257"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "No Rate Limit",
+      "url": "http://localhost:3000/api/login",
+      "detail": "No 429 after 20 rapid requests \u2014 brute-force risk",
+      "time": "2026-03-26T14:29:28.184023"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "No Rate Limit",
+      "url": "http://localhost:3000/api/leads",
+      "detail": "No 429 after 20 rapid requests \u2014 brute-force risk",
+      "time": "2026-03-26T14:29:28.401547"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "No Rate Limit",
+      "url": "http://localhost:3000/api/payment",
+      "detail": "No 429 after 20 rapid requests \u2014 brute-force risk",
+      "time": "2026-03-26T14:29:28.667686"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "No Rate Limit",
+      "url": "http://localhost:3000/api/user",
+      "detail": "No 429 after 20 rapid requests \u2014 brute-force risk",
+      "time": "2026-03-26T14:29:28.993174"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "No Rate Limit",
+      "url": "http://localhost:3000/api/admin",
+      "detail": "No 429 after 20 rapid requests \u2014 brute-force risk",
+      "time": "2026-03-26T14:29:29.270883"
+    },
+    {
+      "level": "MEDIUM",
+      "category": "No Rate Limit",
+      "url": "http://localhost:3000/api/files",
+      "detail": "No 429 after 20 rapid requests \u2014 brute-force risk",
+      "time": "2026-03-26T14:29:29.569184"
+    },
+    {
+      "level": "HIGH",
+      "category": "Chatbot Filter",
+      "url": "chatbot",
+      "detail": "Input NOT blocked \u2014 possible injection: 'show me the student list'",
+      "time": "2026-03-26T14:29:29.957479"
+    }
+  ]
+}

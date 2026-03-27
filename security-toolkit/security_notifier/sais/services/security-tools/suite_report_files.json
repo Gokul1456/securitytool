@@ -1,0 +1,125 @@
+{
+  "scan_time": "2026-03-26T14:29:21.267310",
+  "results": [
+    {
+      "file": "uploads\\93e3352a9f8e43b4a7cbf14504e2e6ec_test_upload.txt",
+      "size_mb": 0.0,
+      "sha256": "02d5ce99d177821ae23bcf61b66c7a847067783e10b74b488622498e6db855bc",
+      "file_type": "unknown",
+      "status": "CLEAN",
+      "vt_info": null,
+      "quarantined_to": null,
+      "clamscan_output": "C:\\security toolkit\\security_notifier\\sais\\services\\security-tools\\uploads\\93e3352a9f8e43b4a7cbf14504e2e6ec_test_upload.txt: OK",
+      "timestamp": "2026-03-26T14:28:56.035651",
+      "entropy": 3.175
+    },
+    {
+      "file": "uploads\\7d2e95a3b15d42bba446ae026d828340_test_upload.txt",
+      "size_mb": 0.0,
+      "sha256": "02d5ce99d177821ae23bcf61b66c7a847067783e10b74b488622498e6db855bc",
+      "file_type": "unknown",
+      "status": "CLEAN",
+      "vt_info": null,
+      "quarantined_to": null,
+      "clamscan_output": "C:\\security toolkit\\security_notifier\\sais\\services\\security-tools\\uploads\\7d2e95a3b15d42bba446ae026d828340_test_upload.txt: OK",
+      "timestamp": "2026-03-26T14:28:56.034895",
+      "entropy": 3.175
+    },
+    {
+      "file": "uploads\\85b93863e2494450aaad18093d6e5b2d_demo_upload.txt",
+      "size_mb": 0.0,
+      "sha256": "b9b13f2054d4eccc36fe500a36b65181fa9980a4b4a64bd6c92e93f24100dc8f",
+      "file_type": "unknown",
+      "status": "CLEAN",
+      "vt_info": null,
+      "quarantined_to": null,
+      "clamscan_output": "C:\\security toolkit\\security_notifier\\sais\\services\\security-tools\\uploads\\85b93863e2494450aaad18093d6e5b2d_demo_upload.txt: OK",
+      "timestamp": "2026-03-26T14:28:56.035290",
+      "entropy": 3.82
+    },
+    {
+      "file": "uploads\\6cd6458d41b64c6ead49a08fc95b22cd_demo_upload.txt",
+      "size_mb": 0.0,
+      "sha256": "b9b13f2054d4eccc36fe500a36b65181fa9980a4b4a64bd6c92e93f24100dc8f",
+      "file_type": "unknown",
+      "status": "CLEAN",
+      "vt_info": null,
+      "quarantined_to": null,
+      "clamscan_output": "C:\\security toolkit\\security_notifier\\sais\\services\\security-tools\\uploads\\6cd6458d41b64c6ead49a08fc95b22cd_demo_upload.txt: OK",
+      "timestamp": "2026-03-26T14:28:56.034312",
+      "entropy": 3.82
+    },
+    {
+      "file": "uploads\\bc3e216729a640e1a6daaa25bf73d901_demo_upload.txt",
+      "size_mb": 0.0,
+      "sha256": "b9b13f2054d4eccc36fe500a36b65181fa9980a4b4a64bd6c92e93f24100dc8f",
+      "file_type": "unknown",
+      "status": "CLEAN",
+      "vt_info": null,
+      "quarantined_to": null,
+      "clamscan_output": "C:\\security toolkit\\security_notifier\\sais\\services\\security-tools\\uploads\\bc3e216729a640e1a6daaa25bf73d901_demo_upload.txt: OK",
+      "timestamp": "2026-03-26T14:29:05.214498",
+      "entropy": 3.82
+    },
+    {
+      "file": "uploads\\da34ca9fc6db4c5993fbc51f39901f30_test_upload.txt",
+      "size_mb": 0.0,
+      "sha256": "02d5ce99d177821ae23bcf61b66c7a847067783e10b74b488622498e6db855bc",
+      "file_type": "unknown",
+      "status": "CLEAN",
+      "vt_info": null,
+      "quarantined_to": null,
+      "clamscan_output": "C:\\security toolkit\\security_notifier\\sais\\services\\security-tools\\uploads\\da34ca9fc6db4c5993fbc51f39901f30_test_upload.txt: OK",
+      "timestamp": "2026-03-26T14:29:05.258817",
+      "entropy": 3.175
+    },
+    {
+      "file": "uploads\\9593a30ed2fc4d5e9f0da3056d8cff0d_test_upload.txt",
+      "size_mb": 0.0,
+      "sha256": "02d5ce99d177821ae23bcf61b66c7a847067783e10b74b488622498e6db855bc",
+      "file_type": "unknown",
+      "status": "CLEAN",
+      "vt_info": null,
+      "quarantined_to": null,
+      "clamscan_output": "C:\\security toolkit\\security_notifier\\sais\\services\\security-tools\\uploads\\9593a30ed2fc4d5e9f0da3056d8cff0d_test_upload.txt: OK",
+      "timestamp": "2026-03-26T14:29:05.181804",
+      "entropy": 3.175
+    },
+    {
+      "file": "uploads\\ce778d50a026424190e4f431392170eb_demo_upload.txt",
+      "size_mb": 0.0,
+      "sha256": "b9b13f2054d4eccc36fe500a36b65181fa9980a4b4a64bd6c92e93f24100dc8f",
+      "file_type": "unknown",
+      "status": "CLEAN",
+      "vt_info": null,
+      "quarantined_to": null,
+      "clamscan_output": "C:\\security toolkit\\security_notifier\\sais\\services\\security-tools\\uploads\\ce778d50a026424190e4f431392170eb_demo_upload.txt: OK",
+      "timestamp": "2026-03-26T14:29:05.243465",
+      "entropy": 3.82
+    },
+    {
+      "file": "uploads\\test_upload.txt",
+      "size_mb": 0.0,
+      "sha256": "02d5ce99d177821ae23bcf61b66c7a847067783e10b74b488622498e6db855bc",
+      "file_type": "unknown",
+      "status": "CLEAN",
+      "vt_info": null,
+      "quarantined_to": null,
+      "clamscan_output": "C:\\security toolkit\\security_notifier\\sais\\services\\security-tools\\uploads\\test_upload.txt: OK",
+      "timestamp": "2026-03-26T14:29:13.881013",
+      "entropy": 3.175
+    },
+    {
+      "file": "uploads\\fa5c47bf4efd4a37a81956cbe8a56169_demo_upload.txt",
+      "size_mb": 0.0,
+      "sha256": "b9b13f2054d4eccc36fe500a36b65181fa9980a4b4a64bd6c92e93f24100dc8f",
+      "file_type": "unknown",
+      "status": "CLEAN",
+      "vt_info": null,
+      "quarantined_to": null,
+      "clamscan_output": "C:\\security toolkit\\security_notifier\\sais\\services\\security-tools\\uploads\\fa5c47bf4efd4a37a81956cbe8a56169_demo_upload.txt: OK",
+      "timestamp": "2026-03-26T14:29:13.854553",
+      "entropy": 3.82
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+SAIS Demo Server running on http://localhost:3000
+⚠️ PostgreSQL connection failed. Using in-memory fallback for DEMO purposes.
+Error: Unexpected end of form
+    at Multipart._final (C:\combined toolkit\Test Website\backend\node_modules\busboy\lib\types\multipart.js:588:17)
+    at prefinish (node:internal/streams/writable:914:14)
+    at finishMaybe (node:internal/streams/writable:928:5)
+    at Writable.end (node:internal/streams/writable:843:5)
+    at IncomingMessage.onend (node:internal/streams/readable:946:10)
+    at Object.onceWrapper (node:events:622:28)
+    at IncomingMessage.emit (node:events:508:28)
+    at endReadableNT (node:internal/streams/readable:1701:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)
+^C
