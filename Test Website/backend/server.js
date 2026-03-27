@@ -9,6 +9,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Global error handler to catch uncaught exceptions and prevent crashes
+app.use((err, req, res, next) => {
+  console.error('[BACKEND] Global error:', err.stack);
+  if (!res.headersSent) {
+    res.status(500).json({ error: 'Internal Server Error', message: 'An unexpected error occurred.' });
+  }
+});
+
 const saisSdk = require('../../security_notifier/sais/sdk/sais-sdk/index.js');
 app.use(saisSdk('DEMO_API_KEY_123', { endpoint: 'https://meek-raindrop-4d4050.netlify.app' }));
 
@@ -410,48 +418,53 @@ app.get('/api/alerts', async (req, res) => {
 
 // APP: Secure File Download
 app.get('/api/files/:id/download', async (req, res) => {
-  const { id } = req.params;
-  
-  let fileInfo = null;
-  if (usePg) {
-    const result = await pool.query('SELECT * FROM Files WHERE id = $1', [id]);
-    fileInfo = result.rows[0];
-  } else {
-    // Demo memory fallback: Search both as number and string
-    fileInfo = memDb.files.find(f => String(f.id) === String(id) || f.id == id);
-    if (!fileInfo) {
-      console.log(`[DEBUG] File not found. Requested ID: ${id}. Available: ${memDb.files.map(f => f.id).join(', ')}`);
-    }
-  }
-
-  if (!fileInfo) return res.status(404).json({ error: 'Record not found for ID: ' + id });
-
-  // Security Check: Only allow download if SAIS marked it as clean
-  if (fileInfo.status !== 'clean') {
-    return res.status(403).json({ 
-      error: 'Access Denied: File security integrity check failed. File is flagged as untrusted.',
-      status: fileInfo.status 
-    });
-  }
-
-  const filePath = path.join(uploadDir, fileInfo.filename);
-  
-  if (fs.existsSync(filePath)) {
-    // Extract original filename by removing the timestamp prefix (Multer demo format: <timestamp>-<originalname>)
-    // This ensures the user's OS recognizes the file type correctly.
-    const originalName = fileInfo.filename.replace(/^\d+-/, '');
+  try {
+    const { id } = req.params;
     
-    // Serve file with correct metadata
-    res.download(filePath, originalName, (err) => {
-      if (err) {
-        console.error("Error during secure file delivery:", err.message);
-        if (!res.headersSent) {
-          res.status(500).json({ error: "Could not deliver file." });
+    let fileInfo = null;
+    if (usePg) {
+      const result = await pool.query('SELECT * FROM Files WHERE id = $1', [id]);
+      fileInfo = result.rows[0];
+    } else {
+      // Demo memory fallback: Search both as number and string
+      fileInfo = memDb.files.find(f => String(f.id) === String(id) || f.id == id);
+    }
+
+    if (!fileInfo || !fileInfo.filename) {
+      return res.status(404).json({ error: 'Record or filename not found for ID: ' + id });
+    }
+
+    // Security Check: Only allow download if SAIS marked it as clean
+    if (fileInfo.status !== 'clean') {
+      return res.status(403).json({ 
+        error: 'Access Denied: File security integrity check failed. File is flagged as untrusted.',
+        status: fileInfo.status 
+      });
+    }
+
+    const filePath = path.join(uploadDir, fileInfo.filename);
+    
+    if (fs.existsSync(filePath)) {
+      // Extract original filename safely
+      const originalName = fileInfo.filename.replace(/^\d+-/, '');
+      
+      // Serve file with correct metadata
+      res.download(filePath, originalName, (err) => {
+        if (err) {
+          console.error("[BACKEND] Error during file delivery:", err.message);
+          if (!res.headersSent) {
+            res.status(500).json({ error: "Could not deliver file." });
+          }
         }
-      }
-    });
-  } else {
-    res.status(410).json({ error: 'File gone on disk (demo environment cleanup)', id });
+      });
+    } else {
+      res.status(410).json({ error: 'File gone on disk (demo environment cleanup)', id });
+    }
+  } catch (err) {
+    console.error('[BACKEND] Download crash caught:', err.stack);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'A server error occurred during download.' });
+    }
   }
 });
 

@@ -8,6 +8,14 @@ const gateway = express();
 gateway.use(cors());
 gateway.use(body);
 
+// Global Error Handler to prevent process crashes
+gateway.use((err, req, res, next) => {
+    console.error('[SAIS GATEWAY] FATAL ERROR:', err.stack);
+    if (!res.headersSent) {
+        res.status(500).json({ error: 'Internal Server Error', message: err.message });
+    }
+});
+
 // Stateful Mock Storage (Persists as long as the Lambda/Process is alive)
 const mockFiles = [
     { id: 1, filename: 'report.pdf', status: 'clean', uploaded_at: new Date('2026-03-27T10:00:00Z') }
@@ -126,22 +134,32 @@ gateway.post('/api/upload', (req, res) => {
 
 // Mock: Secure File Download (Fix for /api/files/:id/download error)
 gateway.get('/api/files/:id/download', (req, res) => {
-    const { id } = req.params;
-    const file = mockFiles.find(f => String(f.id) === String(id));
-    
-    if (!file) {
-        return res.status(404).send('File record not found in mock storage.');
-    }
+    try {
+        const { id } = req.params;
+        const file = mockFiles.find(f => String(f.id) === String(id));
+        
+        if (!file) {
+            return res.status(404).send('File record not found in mock storage.');
+        }
 
-    console.log(`[SAIS GATEWAY] Downloading mock file: ${file.filename} (ID: ${id})`);
-    
-    // Serve a virtual PDF/Binary content with the correct filename
-    res.setHeader('Content-Type', 'application/octet-stream');
-    res.setHeader('Content-Disposition', `attachment; filename="${file.filename}"`);
-    
-    // For the demo, we always send a small "Safe" message content
-    const content = Buffer.from(`SAIS SECURITY CLEARANCE GRANTED\nFilename: ${file.filename}\nTimestamp: ${new Date().toISOString()}\nResult: CLEAN`);
-    res.send(content);
+        console.log(`[SAIS GATEWAY] Downloading mock file: ${file.filename} (ID: ${id})`);
+        
+        // Encode filename for safe headers
+        const safeFilename = encodeURIComponent(file.filename);
+        
+        // Serve a virtual PDF/Binary content with the correct filename
+        res.setHeader('Content-Type', 'application/octet-stream');
+        res.setHeader('Content-Disposition', `attachment; filename="${safeFilename}"; filename*=UTF-8''${safeFilename}`);
+        
+        // For the demo, we always send a small "Safe" message content
+        const content = Buffer.from(`SAIS SECURITY CLEARANCE GRANTED\nFilename: ${file.filename}\nTimestamp: ${new Date().toISOString()}\nResult: CLEAN`);
+        res.send(content);
+    } catch (err) {
+        console.error('[SAIS GATEWAY] Download crash prevented:', err.message);
+        if (!res.headersSent) {
+            res.status(500).send('An error occurred during file delivery.');
+        }
+    }
 });
 
 // Export the app for serverless deployment
