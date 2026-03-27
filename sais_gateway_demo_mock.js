@@ -6,7 +6,11 @@ const body = express.json();
 // GATEWAY & AUTH (Port 4000)
 const gateway = express();
 gateway.use(cors());
-gateway.use(body);
+
+// Global Body Parser Configuration
+// We use JSON for most routes, but RAW for upload to handle binary data
+const jsonParser = express.json();
+const rawParser = express.raw({ type: 'multipart/form-data', limit: '10mb' });
 
 // Global Error Handler to prevent process crashes
 gateway.use((err, req, res, next) => {
@@ -76,7 +80,7 @@ gateway.post('/scan/single', (req, res) => {
 });
 
 // Mock: App APIs (Required by Frontend)
-gateway.post('/api/auth/login', (req, res) => {
+gateway.post('/api/auth/login', jsonParser, (req, res) => {
     const { email, password } = req.body;
     if (email === 'admin@demo.com' && password === 'password123') {
         res.json({
@@ -89,17 +93,17 @@ gateway.post('/api/auth/login', (req, res) => {
     }
 });
 
-gateway.get('/api/dashboard', (req, res) => {
+gateway.get('/api/dashboard', jsonParser, (req, res) => {
     res.json({
         logs: [
             { timestamp: new Date(), ip: '192.168.1.1', location: 'New York, US', risk_score: 10 },
             { timestamp: new Date(), ip: '10.0.0.5', location: 'London, UK', risk_score: 45 }
         ],
-        files: mockFiles
+        files: mockFiles.map(({ content, ...f }) => f) // Exclude binary content from JSON response
     });
 });
 
-gateway.get('/api/alerts', (req, res) => {
+gateway.get('/api/alerts', jsonParser, (req, res) => {
     res.json({
         alerts: [
             { message: 'System Health Check - All Green', risk_score: 0, created_at: new Date() }
@@ -107,29 +111,60 @@ gateway.get('/api/alerts', (req, res) => {
     });
 });
 
-gateway.post('/api/upload', (req, res) => {
-    // Basic multipart parsing simulation for mock
-    // In a real Netlify function without Multer, body might be a Buffer or string
-    let filename = 'uploaded_file.bin';
-    
-    // Attempt to find a filename in the raw body if it's a string (multipart/form-data)
-    if (typeof req.body === 'string' || Buffer.isBuffer(req.body)) {
-        const bodyStr = req.body.toString();
-        const match = bodyStr.match(/filename="(.+?)"/);
-        if (match) filename = match[1];
+gateway.post('/api/upload', rawParser, (req, res) => {
+    try {
+        let filename = 'uploaded_file.bin';
+        let fileContent = req.body;
+        let contentType = 'application/octet-stream';
+
+        // Basic multipart boundary parsing to extract binary file content
+        if (Buffer.isBuffer(req.body)) {
+            const bodyStr = req.body.toString('latin1'); // Use latin1 to preserve binary bytes
+            
+            // Extract filename
+            const filenameMatch = bodyStr.match(/filename="(.+?)"/);
+            if (filenameMatch) filename = filenameMatch[1];
+
+            // Extract content-type of the part
+            const typeMatch = bodyStr.match(/Content-Type:\s*(.+)/i);
+            if (typeMatch) contentType = typeMatch[1].trim();
+
+            // Locate the start of the file data (after the header double newline)
+            const headerEndIndex = bodyStr.indexOf('\r\n\r\n');
+            if (headerEndIndex !== -1) {
+                const dataStart = headerEndIndex + 4;
+                
+                // Find the boundary to know where the data ends
+                const contentTypeHeader = req.headers['content-type'] || '';
+                const boundaryMatch = contentTypeHeader.match(/boundary=(.+)/);
+                if (boundaryMatch) {
+                    const boundary = '--' + boundaryMatch[1];
+                    const dataEnd = bodyStr.indexOf(boundary, dataStart);
+                    if (dataEnd !== -1) {
+                        // Extract the actual binary slice from the original Buffer
+                        fileContent = req.body.slice(dataStart, dataEnd - 2); // -2 removes trailing CRLF
+                    }
+                }
+            }
+        }
+
+        const newFile = {
+            id: Date.now(),
+            filename: filename,
+            content: fileContent,
+            contentType: contentType,
+            status: 'clean',
+            uploaded_at: new Date()
+        };
+        
+        mockFiles.unshift(newFile);
+        console.log(`[SAIS GATEWAY] Mock uploaded file stored: ${filename} (${fileContent.length} bytes)`);
+        
+        res.json({ message: 'File uploaded and scanned successfully.', filename });
+    } catch (err) {
+        console.error('[SAIS GATEWAY] Upload error:', err.message);
+        res.status(500).json({ error: 'Upload failed' });
     }
-    
-    const newFile = {
-        id: Date.now(),
-        filename: filename,
-        status: 'clean',
-        uploaded_at: new Date()
-    };
-    
-    mockFiles.unshift(newFile); // Add to the top of the list
-    console.log(`[SAIS GATEWAY] Mock uploaded file staged: ${filename}`);
-    
-    res.json({ message: 'File uploaded and scanned successfully.', filename });
 });
 
 // Mock: Secure File Download (Fix for /api/files/:id/download error)
@@ -148,12 +183,17 @@ gateway.get('/api/files/:id/download', (req, res) => {
         const safeFilename = encodeURIComponent(file.filename);
         
         // Serve a virtual PDF/Binary content with the correct filename
-        res.setHeader('Content-Type', 'application/octet-stream');
+        res.setHeader('Content-Type', file.contentType || 'application/octet-stream');
         res.setHeader('Content-Disposition', `attachment; filename="${safeFilename}"; filename*=UTF-8''${safeFilename}`);
         
-        // For the demo, we always send a small "Safe" message content
-        const content = Buffer.from(`SAIS SECURITY CLEARANCE GRANTED\nFilename: ${file.filename}\nTimestamp: ${new Date().toISOString()}\nResult: CLEAN`);
-        res.send(content);
+        // Serve the stored content (Buffer)
+        if (file.content) {
+            res.send(file.content);
+        } else {
+            // Fallback for pre-seeded files (like report.pdf)
+            const fallback = Buffer.from(`SAIS SECURITY CLEARANCE GRANTED\nFilename: ${file.filename}\nTimestamp: ${new Date().toISOString()}\nResult: CLEAN`);
+            res.send(fallback);
+        }
     } catch (err) {
         console.error('[SAIS GATEWAY] Download crash prevented:', err.message);
         if (!res.headersSent) {
